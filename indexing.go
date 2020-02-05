@@ -60,7 +60,7 @@ func (i *Index) UpdateLeader(leaders []string, epoch int) {
 }
 
 func (i *Index) Update(block *Block) {
-	for _,tx:=range block.Txs{
+	for _, tx := range block.Txs {
 		i.ExecuteTransaction(&tx)
 	}
 }
@@ -112,11 +112,7 @@ func (i *Index) ExecuteTransaction(tx *Transaction) bool {
 			return false
 		}
 		for _, candidate := range tx.Candidate {
-			//stmt, _ = i.Conn.Prepare("DELETE FROM Vote WHERE address=? AND  voter=?")
-			//_ = stmt.Exec(candidate, voter)
-			//_ = stmt.Reset()
 			stmt, _ = i.Conn.Prepare("INSERT INTO Vote VALUES (?,?,?)")
-			// indexLogger.Infof("%s receive %d from %s", candidate, stake, voter)
 			_ = stmt.Exec(candidate, stake, voter)
 			_ = stmt.Reset()
 
